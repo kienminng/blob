@@ -21,9 +21,11 @@
       <div class="text-center my-5">
         <h1 class="fw-bolder">Welcome to Blog Home!</h1>
         <p class="lead mb-0">A Bootstrap 5 starter layout for your next blog homepage</p>
+        <button class="btn btn-warning"  style="display: inline-block;">Start your blog</button>
       </div>
     </div>
   </header>
+  <ModalBlog ref="modalBlog" :ModalType = this.typeOpen v-if="isOpen == true" />
   <!-- Page content-->
   <div class="container">
     <div class="row">
@@ -45,7 +47,7 @@
         <div class="row">
           <div class="col-lg-6">
             <!-- Blog post-->
-            <div class="card mb-4" v-for="blog in blogs" :key="blog.id">
+            <div class="card mb-4" v-for="blog in data.Data" :key="blog.id">
               <img href="#!"><img class="card-img-top" :src="blog.img" style="max-width: 750px; max-height: 350px;"
                   alt="..."/>
               <div class="card-body">
@@ -67,7 +69,6 @@
             <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
             <li class="page-item"><a class="page-link" href="#!">2</a></li>
             <li class="page-item"><a class="page-link" href="#!">3</a></li>
-            <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
             <li class="page-item"><a class="page-link" href="#!">15</a></li>
             <li class="page-item"><a class="page-link" href="#!">Older</a></li>
           </ul>
@@ -127,21 +128,27 @@
 
 <script>
 import BlogService from '@/service/BlogService';
-// import ModalBlog from './ModalBlog.vue';
+import ModalBlog from './ModalBlog.vue';
 
 export default {
-  // components: { ModalBlog },
+  components: { ModalBlog },
   name: "Home-page",
   data() {
     return {
-      blogs: [],
       filterForm: {
         "type": '',
         "title": '',
         "pageNo": 0
       },
-      isOpen: true,
-      typeOpen: ''
+      isOpen: false,
+      typeOpen: '',
+      data : {
+        Data :[],
+        pageNo : 0,
+        PageSize: 0,
+        TotalItems: 0,
+        TotalPage: 0
+      }
     }
   },
   methods: {
@@ -149,12 +156,17 @@ export default {
       BlogService.getAll(this.filterForm.pageNo)
         .then(
           response => {
-            this.blogs = response.data.Data;
-            console.log(response)
+            this.data = response.data;
+            console.log(this.data);
           }    
         )
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
+    },
+    openModal(type){
+      this.typeOpen = type;
     }
+
+    
   },
   mounted() {
     this.getAll();

@@ -1,5 +1,18 @@
 <template>
-    <section class="container">
+    <section class="container" style="margin-top: 100px;">
+        <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+            
+            <li class="nav-item" role="presentation">
+                <router-link to="/login">
+                <a class="nav-link" id="tab-register" data-mdb-pill-init href="#pills-register" role="tab"
+                    aria-controls="pills-register" aria-selected="false">Login</a>
+                </router-link>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="tab-login" data-mdb-pill-init href="#pills-login" role="tab"
+                    aria-controls="pills-login" aria-selected="true">Regsster</a>
+            </li>
+        </ul>
         <form id="registrationForm" @submit="register($event)">
             <div class="text-center mb-3">
                 <p>Sign up</p>
@@ -44,12 +57,13 @@
 
             <!-- Checkbox -->
             <div class="form-check d-flex justify-content-center mb-4">
-                <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" checked
+                <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" 
                     aria-describedby="registerCheckHelpText" />
                 <label class="form-check-label" for="registerCheck">
                     I have read and agree to the terms
                 </label>
             </div>
+            <button type="button" @click="clear"> clear</button>
 
             <!-- Submit button -->
             <button type= "submit"  data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-3">Register</button>

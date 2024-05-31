@@ -3,7 +3,6 @@
     <router-view></router-view>
   </div>
   
-  <!-- <Login-compt /> -->
 </template>
 
 <script>

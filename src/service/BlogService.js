@@ -16,7 +16,7 @@ class BlogService {
     }
 
     async getAll(pageNumber){
-        return await http.get("/blog?PageNo="+ pageNumber)
+        return await http.get("/blog?pageNo="+ pageNumber)
     }
 }
 

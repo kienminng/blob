@@ -22,8 +22,8 @@
                     <div data-mdb-input-init class="form-outline mb-4">
                         <input type="text" id="loginName" class="form-control"
                             v-model="Authenticaion.usernameOrEmail" />
-                        <label class="form-label" for="loginName">Email or username</label>
-                        <p v-if="usernameError" class="form-label" style="color: red">Username required </p>
+                        <label class="form-label" for="loginName">username</label>
+                        <p v-show="usernameError" class="form-label" style="color: red">Username required </p>
                     </div>
 
                     <!-- Password input -->
@@ -31,7 +31,7 @@
                         <input type="password" id="loginPassword" class="form-control"
                             v-model="Authenticaion.password" />
                         <label class="form-label" for="loginPassword">Password</label>
-                        <p v-if="passwordError" class="form-label" style="color: red">Password required </p>
+                        <p v-show="passwordError" class="form-label" style="color: red">Password required </p>
                     </div>
 
                     <!-- 2 column grid layout -->

@@ -90,10 +90,11 @@
                 <div class="small text-muted">{{ blog.createAt }}</div>
                 <h2 class="card-title h4">{{ blog.title }}</h2>
                 <p class="card-text">{{ blog.content }}</p>
+                <p class="card-text">{{ blog.type }}</p>
                 <p class="card-text">
                   created by username {{ blog.createdByUsername }}
                 </p>
-                <a class="btn btn-primary" href="#!">Read more →</a>
+                <a class="btn btn-primary" @click="OpenUpdateModal(blog)" > Post details</a>
               </div>
             </div>
           </div>
@@ -231,19 +232,21 @@ export default {
         });
     },
     openModal(number) {
+      const token = localStorage.getItem("token");
+      if (token == null) this.$router.push("/login"); 
       if (number == 1) {
         this.typeOpen = "create";
         this.dataFake = { id: 0, title: "", content: "", blogType: "" };
       } else {
         this.typeOpen = "update";
-        this.dataFake = {
-          id: 1,
-          title: "ok",
-          content: "ok",
-          blogType: "TECHNOLOGY",
-        };
       }
       this.isOpen = true;
+    },
+
+    OpenUpdateModal(data){
+      this.dataFake = data;
+      this.openModal(2);
+
     },
 
     closeModal() {

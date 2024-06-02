@@ -45,7 +45,7 @@
                   class="form-control"
                   id="id"
                   v-model="blog.id"
-                  readonly
+                  :readonly="this.ModalType === 'update'"
                 />
               </div>
               <div class="form-group">
@@ -57,6 +57,7 @@
                   class="form-control"
                   id="title"
                   v-model="blog.title"
+                  
                 />
               </div>
               <div class="form-group">
@@ -68,6 +69,7 @@
                   class="form-control"
                   id="img"
                   v-model="blog.img"
+                  :readonly="this.ModalType === 'update' && this.isUpdate === false"
                 />
               </div>
               <div class="form-group">
@@ -79,6 +81,7 @@
                   id="recipient-content"
                   rows="3"
                   v-model="blog.content"
+                  :readonly="this.ModalType === 'update' && this.isUpdate ===false"
                 ></textarea>
                 <!-- <input type="text" class="form-control" id="recipient-content" v-model="blog.content"> -->
               </div>
@@ -86,8 +89,9 @@
                 <label for="recipient-name" class="col-form-label"
                   >blogType:</label
                 >
-                <select name="" id="" v-model="blog.blogType">
-                  <option value="" :selected="blog.blogType === ''">
+                <select name="" id="" v-model="blog.type" 
+                :readonly="this.ModalType === 'update' && this.isUpdate ===false">
+                  <option value="" :selected="blog.type === ''">
                     -- Please Select --
                   </option>
                   <option
@@ -108,7 +112,9 @@
             >
               Close
             </button>
-            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button type="" class="btn btn-primary" v-if="this.ModalType ==='update'">Fix</button>
+            <button type="submit" class="btn btn-primary" v-if="this.ModalType === 'update'">Save changes</button>
+            <button type="submit" class="btn btn-primary" v-else >Create</button>
           </div>
             </form>
           </div>
@@ -138,9 +144,10 @@ export default {
         title: "",
         content: "",
         img: "",
-        blogType: "",
+        type: "",
       },
       blogs: [],
+      isUpdate: false,
       isCreate: true,
       blogTypes: [
         "ROMANTIC",
@@ -178,8 +185,9 @@ export default {
       const data = this.blog;
       BlogService.update(data)
         .then((response) => {
+          this.$emit('fetch-data')
           console.log(response);
-          this.$router.push(this.LocalPagePath);
+          this.closeModal()
         })
         .catch((err) => {
           console.error(err);
@@ -189,6 +197,9 @@ export default {
 
     closeModal() {
       this.$emit("close-modal");
+    },
+    openFix(){
+      this.isUpdate = true;
     },
 
     clearData() {

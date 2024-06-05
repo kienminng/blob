@@ -22,7 +22,7 @@ const routes =  [
         path:'/page',
         name : 'page',
         component : BlogPage,
-        Children: [
+        children: [
             {
                 path : 'myblog',
                 name : 'page-my-blog',

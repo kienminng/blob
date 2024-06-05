@@ -1,18 +1,21 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-      <a class="navbar-brand" href="#!">Start Bootstrap</a>
+    <div class="container" >
+      <router-link to="/">
+        <a class="navbar-brand" style="text-decoration: none !important;">Start Bootstrap</a>
+      </router-link>
+      
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+          <!-- <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
-          <li class="nav-item" @click="logout()" >
-            <a class="nav-link active" aria-current="page" href="#">Log out</a>
+          <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li> -->
+          <li class="nav-item" @click="logout()">
+            <a class="nav-link active" aria-current="page">Log out</a>
           </li>
         </ul>
       </div>
@@ -35,7 +38,7 @@
   <ModalBlog :ModalType="this.typeOpen" :isOpen="isOpen" :data="this.dataFake" @close-modal="closeModal()"
     @fetch-data="getAll(this.pageNumber)" :blogTypes="this.blogTypes" v-if="isOpen == true" />
   <!-- Page content-->
-  <div class="container">
+  <div class="container form-control">
     <div class="row">
       <!-- Blog entries-->
       <div class="col-lg-8">
@@ -56,13 +59,15 @@
         </div>
         <!-- Nested row for non-featured blog posts-->
         <div class="row">
-          <div class="col-lg-6" v-for="blog in data.Data" :key="blog.id">
+          <div class="col-lg-6" v-for="blog in data.Data" :key="blog.id" style="height: 600px;">
             <div class="card mb-4">
-              <img class="card-img-top" :src="blog.img ? blog.img : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg' " style="max-width: 100%; max-height: 350px" alt="..." />
+              <img class="card-img-top"
+                :src="blog.img ? blog.img : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg'"
+                style="max-width: 100%; height: 280px" alt="..." />
               <div class="card-body">
                 <div class="small text-muted">{{ blog.createAt }}</div>
                 <h2 class="card-title h4">{{ blog.title }}</h2>
-                <p class="card-text">{{ blog.content }}</p>
+                <!-- <p class="card-text">{{ blog.content }}</p> -->
                 <p class="card-text">{{ blog.type }}</p>
                 <p class="card-text">
                   created by username {{ blog.createdByUsername }}
@@ -76,19 +81,27 @@
         <nav aria-label="Pagination">
           <hr class="my-0" />
           <ul class="pagination justify-content-center my-4">
-            <li v-if="this.data.TotalPage > 3" class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a>
+            <li v-if="this.data.TotalPage > 3 && this.pageNumber != 0" class="page-item" @click="getAll(0)">
+              <a class="page-link" tabindex="-1" aria-disabled="true">Newest</a>
             </li>
+            <li v-if="this.pageNumber - 2 >= 0" @click="getAll(this.pageNumber - 2)" class="page-item"><a
+                class="page-link">{{ this.pageNumber - 1 }}</a></li>
+            <li class="page-item active" aria-current="page"></li>
             <li v-if="this.pageNumber - 1 >= 0" @click="getAll(this.pageNumber - 1)" class="page-item"><a
-                class="page-link" href="#!">{{ this.pageNumber }}</a></li>
+                class="page-link">{{ this.pageNumber }}</a></li>
             <li class="page-item active" aria-current="page">
-              <a class="page-link" @click="getAll(this.pageNumber)">{{ this.pageNumber + 1 }}</a>
+              <a class="page-link" @click="getAll(this.pageNumber)">{{
+                this.pageNumber + 1 }}</a>
             </li>
-            <li v-if="this.pageNumber + 1 < this.data.TotalPage" @click="getAll(this.pageNumber + 1)"
-              class="page-item"><a class="page-link" href="#!">{{ this.pageNumber + 2 }}</a></li>
-            <li v-if="this.pageNumber + 2 < this.data.TotalPage" @click="getAll(this.pageNumber + 2)"
-              class="page-item"><a class="page-link" href="#!">{{ this.pageNumber + 2 }}</a></li>
-            <li v-if="this.data.TotalPage > 3" class="page-item"><a class="page-link" href="#!">Older</a></li>
+            <li v-if="this.pageNumber + 1 < this.data.TotalPage"
+              @click="this.isFilter ? filter(this.pageNumber + 1) : getAll(this.pageNumber + 1)" class="page-item">
+              <a class="page-link">{{ this.pageNumber + 2 }}</a>
+            </li>
+            <li v-if="this.pageNumber + 2 < this.data.TotalPage" @click="getAll(this.pageNumber + 2)" class="page-item">
+              <a class="page-link">{{ this.pageNumber + 3 }}</a>
+            </li>
+            <li v-if="this.data.TotalPage > 3 && this.pageNumber != this.data.TotalPage - 1"
+              @click="getAll(this.data.TotalPage - 1)" class="page-item"><a class="page-link">Oldest</a></li>
           </ul>
         </nav>
       </div>
@@ -110,24 +123,10 @@
         <!-- Categories widget-->
         <div class="card mb-4">
           <div class="card-header">Categories</div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-sm-6">
-                <ul class="list-unstyled mb-0">
-                  <li><a href="#!">Web Design</a></li>
-                  <li><a href="#!">HTML</a></li>
-                  <li><a href="#!">Freebies</a></li>
-                </ul>
-              </div>
-              <div class="col-sm-6">
-                <ul class="list-unstyled mb-0">
-                  <li><a href="#!">JavaScript</a></li>
-                  <li><a href="#!">CSS</a></li>
-                  <li><a href="#!">Tutorials</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          <select v-model="this.filterForm.type">
+            <option value="" selected style="text-align: center !important">select your blog type</option>
+            <option v-for="blogType in blogTypes" :key="blogType" :value="blogType"> {{ blogType }}</option>
+          </select>
         </div>
         <!-- Side widget-->
         <div class="card mb-4">
@@ -144,7 +143,7 @@
   <footer class="py-5 bg-dark">
     <div class="container">
       <p class="m-0 text-center text-white">
-        Copyright &copy; Your Website 2023
+        Copyright &copy; Your Website 2024
       </p>
     </div>
   </footer>
@@ -171,7 +170,7 @@ export default {
         title: "",
         content: "",
         blogType: "",
-        createdByUsername : ""
+        createdByUsername: ""
       },
       pageNumber: 0,
       data: {
@@ -200,7 +199,7 @@ export default {
       if (number < this.pageNumber) {
         this.pageNumber = number;
       }
-      if(!localStorage.getItem("username") && !localStorage.getItem("token")){
+      if (!localStorage.getItem("username") && !localStorage.getItem("token")) {
         this.$router.push("/login");
       }
       BlogService.getAll(this.pageNumber)
@@ -215,7 +214,7 @@ export default {
     },
     openModal(number) {
       const token = localStorage.getItem("token");
-      if (token == null) this.$router.push("/login");
+      if (token == null || !localStorage.getItem("username") ) this.$router.push("/login");
       if (number == 1) {
         this.typeOpen = "create";
         this.dataFake = { id: 0, title: "", content: "", blogType: "", createdByUsername: "" };
@@ -227,6 +226,18 @@ export default {
 
     OpenUpdateModal(data) {
       this.dataFake = data;
+      console.log(data.id);
+      // eslint-disable-next-line no-debugger
+      debugger
+      if(data.createdByUsername != localStorage.getItem('username')){
+        BlogService.updateViews(data.id)
+        .then(response => {
+          console.log(response)
+        })
+        .catch(
+          err =>console.log(err)
+        );
+      } 
       this.openModal(2);
 
     },
@@ -234,7 +245,8 @@ export default {
     closeModal() {
       this.isOpen = false;
     },
-    logout(){
+
+    logout() {
       localStorage.removeItem("token");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("username");
@@ -243,6 +255,7 @@ export default {
   },
   mounted() {
     this.getAll();
+   
   },
 };
 </script>

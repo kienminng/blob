@@ -1,7 +1,6 @@
 <template>
     <blog-nav></blog-nav>
     <blog-header></blog-header>
-    <button><router-link to="/myblog"></router-link></button>
     <router-view />
 </template>
 <script>

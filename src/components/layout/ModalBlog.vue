@@ -31,15 +31,16 @@
                             <div class="form-group">
                                 <label for="recipient-" class="col-form-label">Img:
                                 </label>
-                                <input type="text" class="form-control" id="img" v-model="blog.img"
+                                <input type="file" class="form-control" id="img" 
                                     :readonly="this.ModalType === 'update' && this.data.createdByUsername != this.username" />
+                                <img class="form-control" :src="this.blog.img ? this.blog.img : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg'" alt="...">
                             </div>
                             <div class="form-group">
                                 <label for="recipient-content" class="col-form-label">Content:</label>
                                 <textarea class="form-control" id="recipient-content" rows="3"
                                     :readonly="this.ModalType === 'update' && this.data.createdByUsername != this.username"
                                     v-model="blog.content"></textarea>
-                                <!-- <input type="text" class="form-control" id="recipient-content" v-model="blog.content"> -->
+                                <p class="form-control" v-if="this.blog.createdByUsername"> </p>
                             </div>
                             <div class="form-group">
                                 <label for="recipient-name" class="col-form-label">blogType:</label>
@@ -97,7 +98,7 @@ export default {
                 id: 0,
                 title: "",
                 content: "",
-                img: "",
+                img: [],
                 type: "",
             },
             isUpdate: false,

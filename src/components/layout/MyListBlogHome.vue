@@ -1,6 +1,4 @@
 <template>
-  <blog-nav />
-  <blog-header />
   <modal-blog/>
   <!-- Page content-->
   <div class="container">
@@ -113,15 +111,11 @@
   </div>
 </template>
 <script>
-import BlogHeader from "./BlogHeader.vue";
-import BlogNav from "./BlogNav.vue";
 import ModalBlog from './ModalBlog.vue';
 
 export default {
   name: "MyListBlogHome",
   components: {
-    BlogNav,
-    BlogHeader,
     ModalBlog,
   },
   data() {

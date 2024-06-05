@@ -63,10 +63,11 @@
                     I have read and agree to the terms
                 </label>
             </div>
-            <button type="button" @click="clear"> clear</button>
-
             <!-- Submit button -->
-            <button type= "submit"  data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-3">Register</button>
+            <button type= "submit"  data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-3" style=" margin-right: 10px !important" >Register</button>
+            <!---clear button-->
+            <button class="btn btn-primary btn-block mb-3" type="button" @click="clear"> clear</button>
+            
         </form>
     </section>
 </template>
@@ -108,7 +109,7 @@ export default {
             .then(response => {
                 console.log(response.data)
                 this.submitted = true;
-                this.$router.push('/')
+                this.$router.push('/login')
 
             })
             .catch(e => {

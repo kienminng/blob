@@ -17,6 +17,14 @@ class BlogService {
 
     async getAll(pageNumber){
         return await http.get("/blog?pageNo="+ pageNumber)
+    } 
+
+    delete(data) {
+        return http.delete("/blog/delete/"+ data)
+    }
+
+    async filterBlog(data){
+        return await http.post("/blog",data)
     }
 }
 

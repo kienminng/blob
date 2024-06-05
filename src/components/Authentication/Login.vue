@@ -95,8 +95,12 @@ export default {
             const data = this.Authenticaion;
             AuthenticationService.login(data)
                 .then(response => {
+                    localStorage.removeItem("username");
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("refreshToken")
                     localStorage.setItem("token", response.data.accessToken);
                     localStorage.setItem("refreshToken", response.data.refreshToken);
+                    localStorage.setItem("username" , response.data.username);
                     this.$router.push("/")
                 }).catch(e => {
                     console.log(e)

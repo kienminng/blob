@@ -6,6 +6,7 @@ import BlogPage from "./components/layout/BlogPage.vue";
 import MyListBlogHome from "./components/layout/MyListBlogHome.vue";
 
 
+
 const routes =  [
     {
         path : '/login',
@@ -39,11 +40,19 @@ const routes =  [
         name : 'my-blog',
         component : MyListBlogHome
     }
+    
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  beforeResolve: (to, from, next) => {
+    if (to.matched.length === 0) {
+      next('/login');
+    } else {
+      next("/"); 
+    }
+  }
 });
 
 export default router;

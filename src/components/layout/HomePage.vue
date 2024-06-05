@@ -2,15 +2,8 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
       <a class="navbar-brand" href="#!">Start Bootstrap</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -18,8 +11,8 @@
           <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
           <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Blog</a>
+          <li class="nav-item" @click="logout()" >
+            <a class="nav-link active" aria-current="page" href="#">Log out</a>
           </li>
         </ul>
       </div>
@@ -33,24 +26,14 @@
         <p class="lead mb-0">
           A Bootstrap 5 starter layout for your next blog homepage
         </p>
-        <button
-          class="btn btn-warning"
-          style="display: inline-block"
-          @click="openModal(1)"
-        >
+        <button class="btn btn-warning" style="display: inline-block" @click="openModal(1)">
           Start your blog
         </button>
       </div>
     </div>
   </header>
-  <ModalBlog
-    :ModalType="this.typeOpen"
-    :isOpen="isOpen"
-    :data="this.dataFake"
-    @close-modal="closeModal()"
-    @fetch-data="getAll()"
-    v-if="isOpen == true"
-  />
+  <ModalBlog :ModalType="this.typeOpen" :isOpen="isOpen" :data="this.dataFake" @close-modal="closeModal()"
+    @fetch-data="getAll(this.pageNumber)" :blogTypes="this.blogTypes" v-if="isOpen == true" />
   <!-- Page content-->
   <div class="container">
     <div class="row">
@@ -58,12 +41,7 @@
       <div class="col-lg-8">
         <!-- Featured blog post-->
         <div class="card mb-4">
-          <a href="#!"
-            ><img
-              class="card-img-top"
-              src="https://dummyimage.com/850x350/dee2e6/6c757d.jpg"
-              alt="..."
-          /></a>
+          <a href="#!"><img class="card-img-top" src="https://dummyimage.com/850x350/dee2e6/6c757d.jpg" alt="..." /></a>
           <div class="card-body">
             <div class="small text-muted">January 1, 2023</div>
             <h2 class="card-title">Featured Post Title</h2>
@@ -80,12 +58,7 @@
         <div class="row">
           <div class="col-lg-6" v-for="blog in data.Data" :key="blog.id">
             <div class="card mb-4">
-              <img
-                class="card-img-top"
-                :src="blog.img"
-                style="max-width: 100%; max-height: 350px"
-                alt="..."
-              />
+              <img class="card-img-top" :src="blog.img ? blog.img : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg' " style="max-width: 100%; max-height: 350px" alt="..." />
               <div class="card-body">
                 <div class="small text-muted">{{ blog.createAt }}</div>
                 <h2 class="card-title h4">{{ blog.title }}</h2>
@@ -94,7 +67,7 @@
                 <p class="card-text">
                   created by username {{ blog.createdByUsername }}
                 </p>
-                <a class="btn btn-primary" @click="OpenUpdateModal(blog)" > Post details</a>
+                <a class="btn btn-primary" @click="OpenUpdateModal(blog)"> Post details</a>
               </div>
             </div>
           </div>
@@ -104,16 +77,17 @@
           <hr class="my-0" />
           <ul class="pagination justify-content-center my-4">
             <li v-if="this.data.TotalPage > 3" class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1" aria-disabled="true"
-                >Newer</a
-              >
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a>
             </li>
-            <li v-if="this.pageNumber - 1 >= 0" @click="getAll(this.pageNumber-1)" class="page-item" ><a class="page-link"  href="#!">{{ this.pageNumber }}</a></li>
+            <li v-if="this.pageNumber - 1 >= 0" @click="getAll(this.pageNumber - 1)" class="page-item"><a
+                class="page-link" href="#!">{{ this.pageNumber }}</a></li>
             <li class="page-item active" aria-current="page">
-              <a class="page-link" @click="getAll(this.pageNumber)" >{{ this.pageNumber + 1 }}</a>
+              <a class="page-link" @click="getAll(this.pageNumber)">{{ this.pageNumber + 1 }}</a>
             </li>
-            <li v-if="this.pageNumber + 1 < this.data.TotalPage " @click="getAll(this.pageNumber + 1)" class="page-item"><a class="page-link"  href="#!">{{ this.pageNumber + 2 }}</a></li>
-            <li v-if="this.pageNumber + 2 < this.data.TotalPage " @click="getAll(this.pageNumber + 2)" class="page-item"><a class="page-link"  href="#!">{{ this.pageNumber + 2 }}</a></li>
+            <li v-if="this.pageNumber + 1 < this.data.TotalPage" @click="getAll(this.pageNumber + 1)"
+              class="page-item"><a class="page-link" href="#!">{{ this.pageNumber + 2 }}</a></li>
+            <li v-if="this.pageNumber + 2 < this.data.TotalPage" @click="getAll(this.pageNumber + 2)"
+              class="page-item"><a class="page-link" href="#!">{{ this.pageNumber + 2 }}</a></li>
             <li v-if="this.data.TotalPage > 3" class="page-item"><a class="page-link" href="#!">Older</a></li>
           </ul>
         </nav>
@@ -125,13 +99,8 @@
           <div class="card-header">Search</div>
           <div class="card-body">
             <div class="input-group">
-              <input
-                class="form-control"
-                type="text"
-                placeholder="Enter search term..."
-                aria-label="Enter search term..."
-                aria-describedby="button-search"
-              />
+              <input class="form-control" type="text" placeholder="Enter search term..."
+                aria-label="Enter search term..." aria-describedby="button-search" />
               <button class="btn btn-primary" id="button-search" type="button">
                 Go!
               </button>
@@ -202,8 +171,9 @@ export default {
         title: "",
         content: "",
         blogType: "",
+        createdByUsername : ""
       },
-      pageNumber : 0,
+      pageNumber: 0,
       data: {
         Data: [],
         pageNo: this.pageNumber,
@@ -211,6 +181,15 @@ export default {
         TotalItems: 0,
         TotalPage: 0,
       },
+      blogTypes: [
+        "ROMANTIC",
+        "TECHNOLOGY",
+        "HISTORY",
+        "CAREER_PATH",
+        "BINANCE",
+        "LEARN",
+        "DEFAULT"
+      ],
     };
   },
   methods: {
@@ -218,8 +197,11 @@ export default {
       if (number > this.pageNumber) {
         this.pageNumber = number;
       }
-      if (number < this.pageNumber){
+      if (number < this.pageNumber) {
         this.pageNumber = number;
+      }
+      if(!localStorage.getItem("username") && !localStorage.getItem("token")){
+        this.$router.push("/login");
       }
       BlogService.getAll(this.pageNumber)
         .then((response) => {
@@ -233,17 +215,17 @@ export default {
     },
     openModal(number) {
       const token = localStorage.getItem("token");
-      if (token == null) this.$router.push("/login"); 
+      if (token == null) this.$router.push("/login");
       if (number == 1) {
         this.typeOpen = "create";
-        this.dataFake = { id: 0, title: "", content: "", blogType: "" };
+        this.dataFake = { id: 0, title: "", content: "", blogType: "", createdByUsername: "" };
       } else {
         this.typeOpen = "update";
       }
       this.isOpen = true;
     },
 
-    OpenUpdateModal(data){
+    OpenUpdateModal(data) {
       this.dataFake = data;
       this.openModal(2);
 
@@ -252,10 +234,13 @@ export default {
     closeModal() {
       this.isOpen = false;
     },
+    logout(){
+      localStorage.removeItem("token");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("username");
+      this.$router.push('/login');
+    },
   },
-  // watch : {
-  //   th
-  // },
   mounted() {
     this.getAll();
   },

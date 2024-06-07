@@ -2,8 +2,9 @@ import { createWebHistory, createRouter } from "vue-router";
 import Login from "./components/Authentication/Login.vue";
 import RegisterForm from "./components/Authentication/RegisterForm.vue";
 import HomePage from "./components/layout/HomePage.vue";
-import BlogPage from "./components/layout/BlogPage.vue";
-import MyListBlogHome from "./components/layout/MyListBlogHome.vue";
+import BlogPage from "./components/layout/page/BlogPage.vue";
+import MyListBlogHome from "./components/layout/page/BlogList.vue";
+import BlogInfo from './components/layout/page/BlogInfo.vue'
 
 
 
@@ -27,6 +28,11 @@ const routes =  [
                 path : 'myblog',
                 name : 'page-my-blog',
                 component : MyListBlogHome,
+            },
+            {
+              path : 'blog-info/:id',
+              name :'blog-info',
+              component : BlogInfo,
             }
         ]
     },
@@ -38,7 +44,7 @@ const routes =  [
     {
         path : '/myBlog/:id',
         name : 'my-blog',
-        component : MyListBlogHome
+        component : BlogInfo
     }
     
 ];

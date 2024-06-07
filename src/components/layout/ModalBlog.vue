@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="modal-backdrop show"></div>
-        <div class="modal show" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-backdrop show "></div>
+        <div class="modal show col-8" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -31,9 +31,10 @@
                             <div class="form-group">
                                 <label for="recipient-" class="col-form-label">Img:
                                 </label>
-                                <input type="file" class="form-control" id="img" 
-                                    :readonly="this.ModalType === 'update' && this.data.createdByUsername != this.username" />
-                                <img class="form-control" :src="this.blog.img ? this.blog.img : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg'" alt="...">
+                                <input v-if="(this.ModalType !='update' || this.data.createdByUsername === this.username) || this.ModalType ==='create'" type="file" class="form-control" id="img"  
+                                     @change="handleImageChange($event)" />
+                                <img v-if="this.ModalType === 'update' && !isChange" class="form-control" :src="this.blog.imgUrl ? this.blog.imgUrl : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg'" alt="...">
+                                <img v-if="blog.imgRender" style="height: 250px; width: 456px;" :src="blog.imgRender" alt="">
                             </div>
                             <div class="form-group">
                                 <label for="recipient-content" class="col-form-label">Content:</label>
@@ -98,8 +99,11 @@ export default {
                 id: 0,
                 title: "",
                 content: "",
-                img: [],
+                imgFile: null,
+                imgRender: '',
+                imgUrl : '',
                 type: "",
+                isChange : false
             },
             isUpdate: false,
             isCreate: true,
@@ -109,11 +113,15 @@ export default {
     computed: {},
     methods: {
         createBlog(e) {
+            
+            // eslint-disable-next-line no-debugger
+            debugger
             e.preventDefault();
             if(this.blog.blogType === '' ){
                 this.blog.blogType = "ROMANTIC"
             }
             const data = this.blog;
+            console.log(data);
             BlogService.create(data)
                 .then((response) => {
                     console.log(response);
@@ -190,7 +198,19 @@ export default {
                         console.log(err)
                         alert("delete err")
                     })
-        }
+        },
+        handleImageChange(event) {
+            const file = event.target.files[0];
+            this.isChange = true;
+            if (!file) return;
+
+            this.blog.imgFile = file;
+            const reader = new FileReader();
+            reader.onload = () => {
+                this.blog.imgRender = reader.result;
+            };
+            reader.readAsDataURL(file);
+        },
     },
     watch: {
         data: {

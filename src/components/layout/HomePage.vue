@@ -11,8 +11,9 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <!-- <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+
+           <li class="nav-item"><a class="nav-link" href="#"> <router-link :to="{ name: 'my-blog', params: { id: 1 } }">Go to Blog 1</router-link></a></li>
+         <!-- <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
           <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li> -->
           <li class="nav-item" @click="logout()">
             <a class="nav-link active" aria-current="page">Log out</a>
@@ -62,7 +63,7 @@
           <div class="col-lg-6" v-for="blog in data.Data" :key="blog.id" style="height: 600px;">
             <div class="card mb-4">
               <img class="card-img-top"
-                :src="blog.img ? blog.img : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg'"
+                :src="blog.imgUrl ? blog.imgUrl : 'http://localhost:7880/api/v1/images/getUri?filename=4ddd102a-d9e5-4a13-8f25-59839bbd11f5-solo-leveling-thumb.jpg'"
                 style="max-width: 100%; height: 280px" alt="..." />
               <div class="card-body">
                 <div class="small text-muted">{{ blog.createAt }}</div>
